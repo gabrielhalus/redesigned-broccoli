@@ -1,20 +1,20 @@
 package handlers
 
 import (
-	"net/http"
+  "net/http"
 
-	"github.com/go-chi/chi"
-	chimiddle "github.com/go-chi/chi/middleware"
-	"github.com/go-chi/cors"
+  "github.com/go-chi/chi"
+  chimiddle "github.com/go-chi/chi/middleware"
+  "github.com/go-chi/cors"
 )
 
 func Handle(r *chi.Mux) {
-	// Global niddleware
-	r.Use(chimiddle.StripSlashes)
-	r.Use(chimiddle.Logger)
+  // Global niddleware
+  r.Use(chimiddle.StripSlashes)
+  r.Use(chimiddle.Logger)
 
-	// CORS
-	r.Use(cors.Handler(cors.Options{
+  // CORS
+  r.Use(cors.Handler(cors.Options{
     // AllowedOrigins:   []string{"https://foo.com"}, // Use this to allow specific origin hosts
     AllowedOrigins:   []string{"https://*", "http://*"},
     // AllowOriginFunc:  func(r *http.Request, origin string) bool { return true },
@@ -29,5 +29,5 @@ func Handle(r *chi.Mux) {
     w.Write([]byte("welcome"))
   })
 
-	r.Get("/config", GetNginxConf)
+  r.Get("/config", GetNginxConf)
 }
