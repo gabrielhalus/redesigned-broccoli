@@ -1,15 +1,16 @@
-# Define variables
-SRC := $(PWD)/cmd/goFlexNginx/main.go
-OUT := $(PWD)/bin
+# Load environment variables from .env file
+include .env
+export
 
-build:
-	@GOOS=linux GOARCH=amd64 go build -o $(OUT) $(SRC) > /dev/null
-	@docker build -t nginx-crossplane . > /dev/null 2>&1
-	@make clean
-	@echo "Build successfully 🚀"
+# Define phony targets (targets that are not actual files)
+.PHONY: up deploy
 
-start bash: build
-	@docker run --interactive --tty --rm --publish 3300:3300 nginx-crossplane $@
+# Target to start the Docker containers
+up:
+	@docker compose up
 
-clean:
-	@rm -f $(OUT)
+# Target for deployment
+deploy:
+	@echo "Deploying your application..."
+	ssh $(SSH_SERVER) 'cd /app && git pull origin main && docker compose up --force-recreate'
+	@echo "Deployment successful!"
